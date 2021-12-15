@@ -5,7 +5,7 @@ function Navbar() {
     <nav className="navbar navbar-expand-lg navbar-light bg-dark mt-2 ms-2 me-2">
       <div className="container-fluid">
         <a className="navbar-brand fs-1 text-light" href="#">
-          Pizza Store
+          Pizzana
         </a>
         <div
           className="collapse navbar-collapse justify-content-end"
