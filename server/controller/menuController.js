@@ -27,6 +27,6 @@ exports.GetPizza = async (req, res) => {
 
   res.json({
     status: 200,
-    data: data,
+    data,
   });
 };
