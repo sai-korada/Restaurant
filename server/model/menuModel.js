@@ -4,6 +4,7 @@ const PizzaSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    minLength: 8,
   },
   size: {
     type: String,

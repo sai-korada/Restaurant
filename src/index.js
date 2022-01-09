@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDom from "react-dom";
 import Navbar from "./Components/Navbar";
-import Card from "./Components/Card";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import CardList from "./Components/CardList";
 import requestMenu from "./Apis/Menu";
+import Cart from "./Components/Cart";
 
 class App extends React.Component {
   constructor(props) {
@@ -26,10 +27,19 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <Navbar />
-        <CardList menu={this.state.data} />
-      </div>
+      <Router>
+        <div>
+          <Navbar />
+          <Switch>
+            <Route exact path="/">
+              <CardList menu={this.state.data} />
+            </Route>
+            <Route path="/cart">
+              <Cart />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
     );
   }
 }
