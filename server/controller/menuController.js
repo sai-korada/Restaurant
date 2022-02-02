@@ -18,11 +18,15 @@ exports.CreatePizza = async (req, res, next) => {
 exports.GetPizza = async (req, res) => {
   let data = await Pizza.find();
 
-  let userName = req.currentUser[0].name.split(" ")[1];
+  // let userName = req.existingUser[0].name.split(" ")[0];
+
+  //let userName = req.currentUser[0].name.split(" ")[1];
+
+  console.log("menu retrieved ");
 
   res.json({
     status: 200,
-    message: `Hello Mr.${userName}`,
+
     data,
   });
 };

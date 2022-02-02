@@ -1,47 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDom from "react-dom";
 import Navbar from "./Components/Navbar";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import CardList from "./Components/CardList";
 import requestMenu from "./Apis/Menu";
 import Cart from "./Components/Cart";
+import LoginForm from "./Components/LoginForm";
+import UserLogin from "./Components/ExistingUser";
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { data: [] };
-  }
+function App() {
+  let [menu, setMenu] = useState();
+  let [loginStatus, setLoginStatus] = useState(false);
 
-  componentDidMount() {
+  let refreshPage = () => {
+    window.location.reload(false);
+  };
+
+  useEffect(() => {
     requestMenu
       .get("/menu/items")
-      .then((data) => {
-        this.setState({
-          data: data.data.data,
-        });
+      .then((response) => {
+        setMenu(response.data.data);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
-  }
+  }, [loginStatus]);
 
-  render() {
-    return (
-      <Router>
-        <div>
-          <Navbar />
-          <Switch>
-            <Route exact path="/">
-              <CardList menu={this.state.data} />
-            </Route>
-            <Route path="/cart">
-              <Cart />
-            </Route>
-          </Switch>
-        </div>
-      </Router>
-    );
-  }
+  return (
+    <Router>
+      <div>
+        <Navbar setLoginStatus={setLoginStatus} loginStatus={loginStatus} />
+        <Routes>
+          <Route path="/" element={<CardList menu={menu} />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route
+            path="/loginForm"
+            element={<LoginForm setLoginStatus={setLoginStatus} />}
+          />
+          <Route
+            path="/existingUser"
+            element={<UserLogin setLoginStatus={setLoginStatus} />}
+          />
+        </Routes>
+      </div>
+    </Router>
+  );
 }
 
 ReactDom.render(<App />, document.getElementById("root"));

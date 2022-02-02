@@ -1,7 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import Cookies from "universal-cookie";
+import axios from "axios";
 
-function Navbar() {
+function Navbar({ setLoginStatus, loginStatus }) {
+  const cookies = new Cookies();
+
+  let userLogout = async () => {
+    await axios({
+      method: "post",
+      url: "http://localhost:4000/api/v1/logout",
+      withCredentials: true,
+    })
+      .then((response) => {
+        cookies.set("jwt", response.data, {
+          path: "/",
+          domain: "http://localhost:3000/",
+        });
+      })
+      .then(() => {
+        setLoginStatus(false);
+      });
+  };
+
+  useEffect(() => {
+    let cookie = cookies.get("jwt");
+
+    cookie ? setLoginStatus(true) : setLoginStatus(false);
+  });
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-dark mt-2 ms-2 me-2">
       <div className="container-fluid">
@@ -15,13 +42,26 @@ function Navbar() {
         >
           <ul className="navbar-nav">
             <li className="nav-item me-4">
-              <a
-                className="nav-link active fs-3 text-light"
-                aria-current="page"
-                href="#"
-              >
-                Login
-              </a>
+              {loginStatus ? (
+                <Link
+                  onClick={(event) => {
+                    userLogout();
+                  }}
+                  className="nav-link active fs-3 text-light logout"
+                  aria-current="page"
+                  to="/"
+                >
+                  Logout
+                </Link>
+              ) : (
+                <Link
+                  className="nav-link active fs-3 text-light"
+                  aria-current="page"
+                  to="/loginForm"
+                >
+                  Sign in
+                </Link>
+              )}
             </li>
             <li className="nav-item me-5">
               <Link
